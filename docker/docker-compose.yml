@@ -1,0 +1,33 @@
+services:
+  nginx:
+    image: ${EDITOR_DOMAIN}:latest
+    build:
+      dockerfile: ./docker/Dockerfile
+      context: ../
+    container_name: ${EDITOR_DOMAIN}
+    hostname: ${EDITOR_DOMAIN}
+    volumes:
+    - ./nginx/default.conf.template:/etc/nginx/templates/default.conf.template
+    - ./certbot/webroot:/var/www/certbot
+    - ./certbot/letsencrypt:/etc/letsencrypt
+    ports:
+    - "80:80"
+    - "443:443"
+    environment:
+    - EDITOR_DOMAIN=${EDITOR_DOMAIN}
+    restart: unless-stopped
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+    - ./certbot/webroot:/var/www/certbot
+    - ./certbot/letsencrypt:/etc/letsencrypt
+    entrypoint: /bin/sh -c
+    command: >
+      "certbot certonly --webroot
+      --webroot-path=/var/www/certbot
+      --email ${EDITOR_EMAIL}
+      --agree-tos
+      --no-eff-email
+      -d ${EDITOR_DOMAIN}"
