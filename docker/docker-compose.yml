@@ -8,6 +8,7 @@ services:
     hostname: ${EDITOR_DOMAIN}
     volumes:
     - ./nginx/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+    - ./certbot/webroot:/var/www/certbot:ro
     - ./certbot/letsencrypt/live/${EDITOR_DOMAIN}:/etc/letsencrypt/live/${EDITOR_DOMAIN}:ro
     ports:
     - "80:80"
