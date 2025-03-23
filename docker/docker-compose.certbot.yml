@@ -13,14 +13,7 @@ services:
     networks:
     - certbot.net
     entrypoint: /bin/sh -c
-    command: >
-      "certbot ${CERT_ACTION}
-       --standalone
-       --webroot-path=/var/www/certbot
-       -d ${CERT_DOMAIN}
-       --email ${CERT_EMAIL}
-       --agree-tos
-       --no-eff-email"
+    command: certbot ${CERT_ACTION} --standalone --webroot-path=/var/www/certbot -d ${CERT_DOMAIN} --email ${CERT_EMAIL} --agree-tos --no-eff-email
 
 volumes:
   certbot-www-data:
