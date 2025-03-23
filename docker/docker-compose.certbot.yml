@@ -1,0 +1,32 @@
+services:
+
+  certbot:
+    image: certbot/certbot:latest
+    container_name: certbot
+    hostname: ${CERT_DOMAIN}
+    volumes:
+    - certbot-www-data:/var/www/certbot
+    - certbot-certs-data:/etc/letsencrypt
+    - ${CERT_VOLUME}:/etc/letsencrypt/live/${CERT_DOMAIN}
+    ports:
+    - "80:80"
+    networks:
+    - certbot.net
+    entrypoint: /bin/sh -c
+    command: >
+      "certbot ${CERT_ACTION}
+       --standalone
+       --webroot-path=/var/www/certbot
+       -d ${CERT_DOMAIN}
+       --email ${CERT_EMAIL}
+       --agree-tos
+       --no-eff-email"
+
+volumes:
+  certbot-www-data:
+  certbot-certs-data:
+  ${CERT_VOLUME}:
+    external: true
+
+networks:
+  certbot.net:

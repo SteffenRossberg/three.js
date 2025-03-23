@@ -1,6 +1,8 @@
 FROM nginx:1.27.4-alpine
 
-RUN apk add bash nano certbot
+EXPOSE 443
+
+RUN apk add bash nano
 
 COPY ["./build/", "/app/build/"]
 COPY ["./editor/", "/app/editor/"]
